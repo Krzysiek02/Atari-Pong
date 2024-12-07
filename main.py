@@ -23,7 +23,7 @@ clock = pygame.time.Clock()
 PAD_HEIGHT = 100
 PAD_WIDTH = 15
 PAD_SPEED_PLAYER = 4.2
-BALL_SPEED = [3,3]
+BALL_SPEED = [2,2]
 BALL_SIZE = 15
 
 # POINTS
@@ -142,19 +142,7 @@ while True:
     # BALL COLLISION WITH SCREEN
     if ball.rect.y >= height - ball.rect.height or ball.rect.y <= 0: 
         BALL_SPEED[1] = -BALL_SPEED[1]    
-        
-    # BALL COLLISION WITH PAD
-    #if pygame.sprite.groupcollide(BALL_GROUP, PADS_GROUP, False, False):
-    #    if BALL_SPEED[0] >0:
-    #        BALL_SPEED[0] = random.uniform(8,18)
-    #    else:
-    #        BALL_SPEED[0] = random.uniform(-8,-18)
-    #    BALL_SPEED[0] = -BALL_SPEED[0]
-    #    if BALL_SPEED[1] >= 0:
-    #        BALL_SPEED[1] = random.randint(0, 8)
-    #    if BALL_SPEED[1] < 0:
-    #        BALL_SPEED[1] = random.randint(-8, 0)
-    
+
     # BALL COLLISION WITH PAD
     if player1_PAD.rect.colliderect(ball.rect) or player2_PAD.rect.colliderect(ball.rect):
         if player1_PAD.rect.colliderect(ball.rect):
@@ -170,19 +158,20 @@ while True:
             BALL_SPEED[1] = random.randint(0, 6)
         if BALL_SPEED[1] < 0:
             BALL_SPEED[1] = random.randint(-6, 0)
-            
-    # POINT FOR PLAYER 1
-    if ball.rect.x <= 2:
-        player1_score +=1
-        ball.rect.topleft = (800, 350)
-        BALL_SPEED = [5,5]
-        
-    # POINT FOR PLAYER 2
-    if ball.rect.x >= width-2:
-        player2_score +=1
-        ball.rect.topleft = (800, 350)
-        BALL_SPEED = [5,5]
     
+    
+    if ball.rect.x <= 2 or ball.rect.x >= width-2:
+        # POINT FOR PLAYER 1
+        if ball.rect.x <= 2:
+            player1_score +=1
+            ball.rect.topleft = (800, 350)
+            BALL_SPEED = [-3,-3]
+        else:
+            player2_score +=1
+            ball.rect.topleft = (800, 350)
+            BALL_SPEED = [3,3]
+        player1_PAD.rect.topleft = (width - PAD_WIDTH - 50, (height - PAD_HEIGHT) //2)
+        player2_PAD.rect.topleft = (50, (height - PAD_HEIGHT) //2 )
     
     # WIN
     if player1_score >= winning_points or player2_score >= winning_points:
